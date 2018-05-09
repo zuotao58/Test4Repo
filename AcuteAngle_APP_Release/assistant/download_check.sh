@@ -5,14 +5,13 @@
 #  Object: app tool
 # ============================================================================
 #   Date          Author            Modification
-#  2017-04-08	  jw.hu	            Creation
 #  Main use:
 #  download Project_Release to local folder
 ##############################################################################
 
-HOST='192.168.31.242'
+HOST=''
 USER='acuteangleftp'
-PASS='sjx1234'
+PASS=''
 
 project_sync=$1
 releasedir=$2

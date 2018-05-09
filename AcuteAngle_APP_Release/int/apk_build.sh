@@ -124,7 +124,7 @@ update_tools()
         #git pull
     #fi
 
-    apptools_dir="${current_dir}/../AcuteAngle_Generaltools"
+    apptools_dir="${current_dir}/../acuteag_generaltools"
     int_dir="${current_dir}/int"
     scripts_dir="${current_dir}/assistant"
     tools_dir="${apptools_dir}/sdk-tools/lib"
@@ -136,7 +136,7 @@ download_module_code()
 {
     trap 'traperror ${LINENO} ${FUNCNAME} ${BASH_LINENO}' ERR
 
-    code_dir="${current_dir}/msm8998"
+    code_dir=${current_dir}/../${platform_name}
 
     if [ "${is_sdk_make}" == "false" ]; then
        if [ ! -d ${code_dir} ]; then
@@ -594,11 +594,11 @@ sign_apk()
            exit 1
         fi
     elif [ ${build_env} == "gradlem" ];then
-        cp ${module_dir}/app/build/outputs/apk/release/*-release*.apk release.apk
+        cp ${module_dir}/app/build/outputs/apk/*-release*.apk release.apk
 
         java -Xmx512m -jar ${tools_dir}/signapk.jar ${android_key_dir}/${android_sign_mode}.x509.pem ${android_key_dir}/${android_sign_mode}.pk8 release.apk release_signed_platform.apk
     elif [ ${build_env} == "gradlen" ];then
-        cp ${module_dir}/app/build/outputs/apk/release/*-release*.apk release.apk
+        cp ${module_dir}/app/build/outputs/apk/*-release*.apk release.apk
 
         java -Djava.library.path=${tools_dir}/so -jar ${tools_dir}/signapk.jar \
         ${android_key_dir}/${android_sign_mode}.x509.pem ${android_key_dir}/${android_sign_mode}.pk8 release.apk release_signed_platform.apk
@@ -676,36 +676,6 @@ upload_sw()
     echo "*****************************************************************************************"
 }
 
-update_aa_base_code() {
-    if [ "${build_env}" == "msm8998" ] ; then
-
-        echo "update acuteag base code..."    
-    
-        if [ -d $current_dir/AcuteagBase ];then
-          rm -rf $current_dir/AcuteagBase
-        fi
-    
-        if [ -d $current_dir/acuteag-framework ];then
-          rm -rf $current_dir/acuteag-framework
-        fi
-    
-        git clone gerritroot@192.168.31.242:AcuteagBase.git -b acuteag_dev_1.0.1
-    
-        git clone gerritroot@192.168.31.242:apps/qcom/acuteag-framework.git -b acuteag_dev_1.0.1
-    
-        if [ -d $current_dir/AcuteagBase ];then
-            cp -rf $current_dir/acuteag-framework  $current_dir/AcuteagBase/vendor/acuteangle
-            rm -rf $current_dir/acuteag-framework
-        fi
-    
-        if [ -d $current_dir/msm8998 ];then
-            rm -f $current_dir/msm8998/build.sh
-            rm -rf $current_dir/msm8998/vendor/acuteangle
-            cp -rf $current_dir/AcuteagBase/* $current_dir/msm8998
-        fi
-    fi
-}
-
 build_init
 build_check_module
 build_fetch_apkconfig
@@ -719,8 +689,6 @@ build_deliver_version
 build_setsignmode
 build_externalinfo
 
-update_aa_base_code
-
 echo "****** Start building apk..."
 source ${apptools_dir}/envsetup.sh
 echo "****** Build_apk ${git_store_name} ${build_env} ${branch_name}"
@@ -731,4 +699,3 @@ sign_apk
 optimize_apk
 upload_tag
 upload_sw
-

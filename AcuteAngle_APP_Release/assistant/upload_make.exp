@@ -1,0 +1,49 @@
+#! /usr/bin/expect
+
+set project_remote /APP_Release
+set prod [lindex $argv 0]
+set folder [lindex $argv 1]
+set mode [lindex $argv 2]
+set vers [lindex $argv 3]
+set password [lindex $argv 4]
+
+set timeout 60
+spawn ftp 192.168.31.242
+
+expect "Name*"
+send "acuteangleftp\r"
+
+expect "Password:*"
+send "sjx1234\r"
+
+expect "ftp>"
+send "cd $project_remote\n"
+
+expect "ftp>"
+send "mkdir $prod\n"
+
+expect "ftp>"
+send "cd $prod\n"
+
+expect "ftp>"
+send "mkdir $folder\n"
+
+expect "ftp>"
+send "cd $folder\n"
+
+expect "ftp>"
+send "mkdir $vers\n"
+expect "ftp>"
+send "cd $vers\n"
+
+expect "ftp>"
+send "lcd $mode\n"
+expect "ftp>"
+send "prompt\r"
+
+expect "ftp>"
+send "mput ./* ./\n"
+
+expect "ftp>"
+send "exit\n"
+expect eof

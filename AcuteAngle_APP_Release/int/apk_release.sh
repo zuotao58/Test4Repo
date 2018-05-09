@@ -11,7 +11,7 @@ set -o errexit
 set -x
 
 SOURCE_SERVER="gerritroot@192.168.31.242"
-PASSWD="aacs243"
+PASSWD="sjx1234"
 typeset -u tagnumber
 
 current_dir=`pwd`
@@ -19,14 +19,12 @@ current_dir=`pwd`
 tmp_folder="${current_dir}/tmpfolder"
 tmp_resultfile="${tmp_folder}/result.txt"
 
-####发布目录########
 acuteag_dir="${current_dir}/../acuteag"
 acuteag_release_dir="${SOURCE_SERVER}:/quic/la/acuteag"
 acuteag_release_branch="LA.UM.6.4.1.r1"
 acuteag_master_branch="LA.UM.6.4.1.r1_master"
 
 release_dir=${branch_name}
-###################
 
 release_init()
 {
@@ -424,10 +422,9 @@ release_syncapkrele()
     elif [ "${branch_name}" == "acuteag_master_1.0.1" ];then
         acuteag_release_branch="LA.UM.6.4.1.r1_master"
     fi
-###获取发布目录源码###
+
     if [ ! -d ${acuteag_dir} ];then
         git clone ${acuteag_release_dir}  ${acuteag_dir}
-#################
     else
         cd ${acuteag_dir}
         git reset --hard
@@ -632,4 +629,3 @@ release_upload_sw
 release_syncapkrele
 release_updateinfo
 release_sendemail
-
